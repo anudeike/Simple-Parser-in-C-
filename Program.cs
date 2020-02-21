@@ -14,6 +14,30 @@ using System.Net.Mime;
 
 namespace SimpleTokenizer
 {
+    class Tokenizer
+    {
+        public List<Token> tokens;
+
+        public Tokenizer(string raw_text)
+        {
+            this.tokens = GenerateTokenList(raw_text);
+        }
+        
+        // generate the token list
+        private List<Token> GenerateTokenList(string text)
+        {
+            // create a temp list to hold the tokens
+            List<Token> t;
+            
+            // for each token in the Regex Split
+            foreach (var symbol in Regex.Split(text,@"\s+"))
+            {
+                // go thru the cases to check what type of variable is cominhg in 
+                t.Add(new Token(symbol));
+            }
+            return null;
+        }
+    }
     // token class
     class Token
     {
@@ -66,8 +90,6 @@ namespace SimpleTokenizer
             // returns the next token
             return null;
         }
-        
-        
         
     }
     // main program class
