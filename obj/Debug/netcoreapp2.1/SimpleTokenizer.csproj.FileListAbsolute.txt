@@ -1,0 +1,11 @@
+C:\Users\Ikechukwu Anude\RiderProjects\SimpleTokenizer\bin\Debug\netcoreapp2.1\SimpleTokenizer.deps.json
+C:\Users\Ikechukwu Anude\RiderProjects\SimpleTokenizer\bin\Debug\netcoreapp2.1\SimpleTokenizer.runtimeconfig.json
+C:\Users\Ikechukwu Anude\RiderProjects\SimpleTokenizer\bin\Debug\netcoreapp2.1\SimpleTokenizer.runtimeconfig.dev.json
+C:\Users\Ikechukwu Anude\RiderProjects\SimpleTokenizer\bin\Debug\netcoreapp2.1\SimpleTokenizer.dll
+C:\Users\Ikechukwu Anude\RiderProjects\SimpleTokenizer\bin\Debug\netcoreapp2.1\SimpleTokenizer.pdb
+C:\Users\Ikechukwu Anude\RiderProjects\SimpleTokenizer\obj\Debug\netcoreapp2.1\SimpleTokenizer.csprojAssemblyReference.cache
+C:\Users\Ikechukwu Anude\RiderProjects\SimpleTokenizer\obj\Debug\netcoreapp2.1\SimpleTokenizer.csproj.CoreCompileInputs.cache
+C:\Users\Ikechukwu Anude\RiderProjects\SimpleTokenizer\obj\Debug\netcoreapp2.1\SimpleTokenizer.AssemblyInfoInputs.cache
+C:\Users\Ikechukwu Anude\RiderProjects\SimpleTokenizer\obj\Debug\netcoreapp2.1\SimpleTokenizer.AssemblyInfo.cs
+C:\Users\Ikechukwu Anude\RiderProjects\SimpleTokenizer\obj\Debug\netcoreapp2.1\SimpleTokenizer.dll
+C:\Users\Ikechukwu Anude\RiderProjects\SimpleTokenizer\obj\Debug\netcoreapp2.1\SimpleTokenizer.pdb
