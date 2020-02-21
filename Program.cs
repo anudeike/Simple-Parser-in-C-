@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 
 /*
@@ -27,13 +28,31 @@ namespace SimpleTokenizer
         private List<Token> GenerateTokenList(string text)
         {
             // create a temp list to hold the tokens
-            List<Token> t;
+            List<Token> t = new List<Token>();
             
+            // list of possible operators
+            string[] operators = {"+", "-", "*", "/"};
             // for each token in the Regex Split
             foreach (var symbol in Regex.Split(text,@"\s+"))
             {
-                // go thru the cases to check what type of variable is cominhg in 
-                t.Add(new Token(symbol));
+                string type = "";
+                
+                // if it matches a digit
+                if (Regex.IsMatch(symbol, @"\d+"))
+                {
+                    type = "INTEGER";
+                }
+                
+                // if it matches an operation
+                if (operators.Contains(symbol))
+                {
+                    type = "OP";
+                }
+                
+                // add to the token list
+                t.Add(new Token(type, symbol));
+                // go thru the cases to check what type of variable is coming
+                Console.WriteLine(symbol + " " + type);
             }
             return null;
         }
@@ -43,12 +62,12 @@ namespace SimpleTokenizer
     {
         // this class merely represents a token
         
-        public int Value;
+        public string Value;
         public string Type;
         
-        public Token(string type, int value)
+        public Token(string type, string value)
         {
-            // for now, we are going to leave value as an int, but it should be able to accept any type of variable
+            // make them both come in a strings
             this.Type = type;
             this.Value = value;
         }
@@ -99,15 +118,9 @@ namespace SimpleTokenizer
         {
             // source code that we will test
             string code = "3 + 4";
-            
-            // split the code by the space -> consume all the space in between
-            string[] splited = Regex.Split(code, @"\s+"); 
-            
-            // print
-            foreach (var token in splited)
-            {
-                Console.WriteLine(token);
-            }
+
+            // push thru the tokenizer
+            Tokenizer tk = new Tokenizer(code);
         }
     }
 }
