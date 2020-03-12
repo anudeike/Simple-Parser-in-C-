@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Mime;
 
 /*
@@ -9,8 +10,11 @@ using System.Net.Mime;
  * this handles simple operations such as 3 + 6
  *
  * Grammar ->
+ * GOAL ::= ASSIGNMENT
+ * ASSIGNMENT ::= LHS '=' RHS ';'
+ * LHS = IDENTIFIER
+ * RHS = IDENTIFIER | NUMBER
  * 
- * expr: INTEGER OP INTEGER EOF
  */
 
 namespace SimpleTokenizer
@@ -32,6 +36,7 @@ namespace SimpleTokenizer
             
             // list of possible operators
             string[] operators = {"+", "-", "*", "/"};
+            
             // for each token in the Regex Split
             foreach (var symbol in Regex.Split(text,@"\s+"))
             {
@@ -43,10 +48,17 @@ namespace SimpleTokenizer
                     type = "INTEGER";
                 }
                 
+                // don't need this yet
                 // if it matches an operation
-                if (operators.Contains(symbol))
+                // if (operators.Contains(symbol))
+                // {
+                //     type = "OP";
+                // }
+                
+                // if it matches an equal sign
+                if (symbol.Equals("="))
                 {
-                    type = "OP";
+                    type = "EQUALS_SIGN";
                 }
                 
                 // add to the token list
@@ -54,6 +66,9 @@ namespace SimpleTokenizer
                 // go thru the cases to check what type of variable is coming
                 Console.WriteLine(symbol + " " + type);
             }
+            
+            // end an eof token to the end -> will use the new line character for the time being
+            t.Add(new Token("EOF", "\n")); 
             return null;
         }
     }
@@ -117,7 +132,7 @@ namespace SimpleTokenizer
         static void Main(string[] args)
         {
             // source code that we will test
-            string code = "3 + 4";
+            string code = "a = 9";
 
             // push thru the tokenizer
             Tokenizer tk = new Tokenizer(code);
