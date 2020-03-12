@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mime;
+using System.Runtime.CompilerServices;
 
 /*
  * CALCULATOR PROGRAM
@@ -11,7 +12,7 @@ using System.Net.Mime;
  *
  * Grammar ->
  * GOAL ::= ASSIGNMENT
- * ASSIGNMENT ::= LHS '=' RHS ';'
+ * ASSIGNMENT ::= LHS '=' RHS
  * LHS = IDENTIFIER
  * RHS = IDENTIFIER | NUMBER
  * 
@@ -46,32 +47,52 @@ namespace SimpleTokenizer
                 if (Regex.IsMatch(symbol, @"\d+"))
                 {
                     type = "INTEGER";
+                    // add to the token list
+                    t.Add(new Token(type, symbol));
+                    
+                    // go thru the cases to check what type of variable is coming
+                    Console.WriteLine(symbol + " " + type);
+                    
+                    continue;
                 }
                 
-                // don't need this yet
-                // if it matches an operation
-                // if (operators.Contains(symbol))
-                // {
-                //     type = "OP";
-                // }
-                
+                // if it matches a word
+                if (Regex.IsMatch(symbol, @"\w+"))
+                {
+                    type = "IDENTIFIER";
+                    
+                    // add to the token list
+                    t.Add(new Token(type, symbol));
+                    
+                    // go thru the cases to check what type of variable is coming
+                    Console.WriteLine(symbol + " " + type);
+                    continue;
+                }
+
                 // if it matches an equal sign
                 if (symbol.Equals("="))
                 {
                     type = "EQUALS_SIGN";
+                    
+                    // add to the token list
+                    t.Add(new Token(type, symbol));
+                    
+                    // go thru the cases to check what type of variable is coming
+                    Console.WriteLine(symbol + " " + type);
+                    continue;
                 }
                 
-                // add to the token list
-                t.Add(new Token(type, symbol));
-                // go thru the cases to check what type of variable is coming
-                Console.WriteLine(symbol + " " + type);
+                
             }
             
             // end an eof token to the end -> will use the new line character for the time being
             t.Add(new Token("EOF", "\n")); 
             return null;
         }
+        
+        
     }
+    
     // token class
     class Token
     {
@@ -94,35 +115,93 @@ namespace SimpleTokenizer
         }
     }
 
-    class Interpreter
+    class Parser
     {
-        public string Text;
-        public int Pos;
-        public Token Current_Token; // this should start out empty and will be created
+        public List<Token> tokens;
         
-        // this is the main intepreter class
-        public Interpreter(string text)
+        public Parser(List<Token> tks)
         {
-            // string input
-            this.Text = text;
-            
-            //set the pos to 0 and set the current token to null
-            this.Pos = 0;
-            this.Current_Token = null;
+            this.tokens = tks;
+        }
+
+        public bool ParseTokens()
+        {
+            foreach (var tk in tokens)
+            {
+                
+            }
+            return false;
+        }
+        public void ThrowError(string type)
+        {
+            // crude but will be improved on later
+            if (type.Equals("syntax"))
+            {
+                Console.WriteLine("SYNTAX ERROR");
+            }
         }
         
-        // will implement better error handling later
-        public string ThrowError()
+        // list of parsing functions
+        public bool Parse_Goal()
         {
-            return "Error parsing.";
+            return false;
         }
         
-        // get the next token
-        public Token GetToken()
+        public bool Parse_Assignment()
         {
+            return false;
+        }
+        
+        public bool Parse_LHS()
+        {
+            return false;
+        }
+        
+        public bool Parse_RHS(Token tk)
+        {
+            // according to the grammar given
+            if (Parse_Identifer(tk))
+            {
+                
+            }
             
-            // returns the next token
-            return null;
+            return false;
+        }
+        
+        // TERMINALS
+        public bool Parse_Equals(Token tk)
+        {
+            if (tk.Type.Equals("IDENTIFIER"))
+            {
+                Console.WriteLine("\nFound Identifier: ");
+                return true;
+            }
+            
+            return false;
+        }
+        
+        public bool Parse_Identifer(Token tk)
+        {
+            if (tk.Type.Equals("IDENTIFIER"))
+            {
+                Console.WriteLine("\nFound Identifier: ");
+                return true;
+            }
+            
+            return false;
+        }
+        
+        public bool Parse_Integer(Token tk)
+        {
+            // test input to see if it is an integer
+            // this is a terminal, so you only need to test if it is what it is
+            if (tk.Type.Equals("INTEGER"))
+            {
+                Console.WriteLine("\nFound Integer: ");
+                return true;
+            }
+            
+            return false;
         }
         
     }
