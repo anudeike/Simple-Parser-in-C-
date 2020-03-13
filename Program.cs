@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
  * this handles simple operations such as 3 + 6
  *
  * Grammar ->
- * GOAL ::= ASSIGNMENT
+ * GOAL ::= ASSIGNMENT EOF
  * ASSIGNMENT ::= LHS '=' RHS
  * LHS = IDENTIFIER
  * RHS = IDENTIFIER | NUMBER
@@ -147,16 +147,31 @@ namespace SimpleTokenizer
             {
                 Console.WriteLine($"SYNTAX ERROR with token: {t.Value}");
             }
+            
+            if (type.Equals("unknown"))
+            {
+                Console.WriteLine($"UNKNOWN TOKEN: {t.Value}");
+            }
         }
         
         // list of parsing functions
         public bool Parse_Goal(Token tk)
         {
+            if (tk.Type.Equals("EOF"))
+            {
+                Console.WriteLine("reached the end");
+                return false;
+            }
+            
             if (Parse_Assignment(tk))
             {
                 Console.WriteLine("Parsed correctly");
                 return true;
             }
+            
+            // if it is neither of the above then it is not in the language
+            ThrowError("unknown", tk);
+            
             return false;
         }
         
@@ -179,7 +194,10 @@ namespace SimpleTokenizer
             {
                 return true;
             }
+
             
+            
+            ThrowError("syntax", tk);
             return false;
         }
         
@@ -254,7 +272,7 @@ namespace SimpleTokenizer
         static void Main(string[] args)
         {
             // source code that we will test
-            string code = "a = 9";
+            string code = "a = i";
 
             // push thru the tokenizer
             Tokenizer tk = new Tokenizer(code);
