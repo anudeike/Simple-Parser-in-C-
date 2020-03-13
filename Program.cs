@@ -87,7 +87,7 @@ namespace SimpleTokenizer
             
             // end an eof token to the end -> will use the new line character for the time being
             t.Add(new Token("EOF", "\n")); 
-            return null;
+            return t;
         }
         
         
@@ -126,34 +126,71 @@ namespace SimpleTokenizer
 
         public bool ParseTokens()
         {
+            if (tokens == null)
+            {
+                // get mad
+                Console.WriteLine("The tokens list is empty...");
+                return false;
+            }
+            
+            
             foreach (var tk in tokens)
             {
-                
+                Parse_Goal(tk);
             }
             return false;
         }
-        public void ThrowError(string type)
+        public void ThrowError(string type, Token t)
         {
             // crude but will be improved on later
             if (type.Equals("syntax"))
             {
-                Console.WriteLine("SYNTAX ERROR");
+                Console.WriteLine($"SYNTAX ERROR with token: {t.Value}");
             }
         }
         
         // list of parsing functions
-        public bool Parse_Goal()
+        public bool Parse_Goal(Token tk)
         {
+            if (Parse_Assignment(tk))
+            {
+                Console.WriteLine("Parsed correctly");
+                return true;
+            }
             return false;
         }
         
-        public bool Parse_Assignment()
+        public bool Parse_Assignment(Token tk)
         {
+            // not sure why the logic inverts here -_-
+            
+            // according to the grammar given
+            if (Parse_LHS(tk))
+            { 
+                return true;
+            }
+
+            if (Parse_Equals(tk))
+            {
+                return true;
+            }
+
+            if (Parse_RHS(tk))
+            {
+                return true;
+            }
+            
             return false;
         }
         
-        public bool Parse_LHS()
+        public bool Parse_LHS(Token tk)
         {
+            // according to the grammar given
+            if (Parse_Identifer(tk))
+            {
+                Console.WriteLine("\nFound LHS: ");
+                return true;
+            }
             return false;
         }
         
@@ -162,18 +199,24 @@ namespace SimpleTokenizer
             // according to the grammar given
             if (Parse_Identifer(tk))
             {
-                
+                Console.WriteLine("\nFound RHS: ");
+                return true;
             }
-            
+
+            if (Parse_Integer(tk))
+            {
+                Console.WriteLine("\nFound RHS");
+                return true;
+            }
             return false;
         }
         
         // TERMINALS
         public bool Parse_Equals(Token tk)
         {
-            if (tk.Type.Equals("IDENTIFIER"))
+            if (tk.Type.Equals("EQUALS_SIGN"))
             {
-                Console.WriteLine("\nFound Identifier: ");
+                Console.WriteLine("\nFound Equal Sign: ");
                 return true;
             }
             
@@ -215,6 +258,15 @@ namespace SimpleTokenizer
 
             // push thru the tokenizer
             Tokenizer tk = new Tokenizer(code);
+            
+            // push the tokens into the parser
+            Parser pr = new Parser(tk.tokens);
+
+            pr.ParseTokens();
+            // foreach (var t in pr.tokens)
+            // {
+            //     Console.WriteLine(t.ToString());
+            // }
         }
     }
 }
