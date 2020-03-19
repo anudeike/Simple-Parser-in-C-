@@ -34,10 +34,7 @@ namespace SimpleTokenizer
         {
             // create a temp list to hold the tokens
             List<Token> t = new List<Token>();
-            
-            // list of possible operators
-            string[] operators = {"+", "-", "*", "/"};
-            
+
             // for each token in the Regex Split
             foreach (var symbol in Regex.Split(text,@"\s+"))
             {
@@ -89,6 +86,55 @@ namespace SimpleTokenizer
             t.Add(new Token("EOF", "\n")); 
             return t;
         }
+
+        private List<Token> GenerateTokenUsingSplit(string text)
+        {
+            // take in the string and use the match function to match function to create a token
+            string[] tks = text.Split(new char[] {' ', ';'});
+            
+            // create a temp list to hold the tokens
+            List<Token> t = new List<Token>();
+            
+            // for each token, match it
+            foreach (string word in tks)
+            {
+                t.Add(Match(word));
+            }
+            
+            return t;
+        }
+
+        private Token Match(string unMatchedToken)
+        {
+            string type = "";
+            
+            // if it matches a digit
+            if (Regex.IsMatch(unMatchedToken, @"\d+"))
+            {
+                // return the token
+                Console.WriteLine(unMatchedToken + " INTEGER");
+                return new Token("INTEGER", unMatchedToken);
+            }
+                
+            // if it matches a word
+            if (Regex.IsMatch(unMatchedToken, @"\w+"))
+            {
+                // return the token
+                Console.WriteLine(unMatchedToken + " IDENTIFIER");
+                return new Token("IDENTIFIER", unMatchedToken);
+            }
+
+            // if it matches an equal sign
+            if (unMatchedToken.Equals("="))
+            {
+                // return the token
+                Console.WriteLine(unMatchedToken + " EQUAL_SIGN");
+                return new Token("INTEGER", unMatchedToken);
+            }
+            return null;
+        }
+        
+        
         
         
     }
@@ -136,6 +182,7 @@ namespace SimpleTokenizer
             
             foreach (var tk in tokens)
             {
+                
                 Parse_Goal(tk);
             }
             return false;
@@ -271,8 +318,17 @@ namespace SimpleTokenizer
     {
         static void Main(string[] args)
         {
-            // source code that we will test
-            string code = "a = i";
+            string example = "a = 9; b = 9;";
+
+            string[] tokens = example.Split(new char[] {' ', ';'});
+
+            foreach (string word in tokens)
+            {
+                Console.WriteLine(word);
+            }
+            
+            /*// source code that we will test
+            string code = "a = 9;";
 
             // push thru the tokenizer
             Tokenizer tk = new Tokenizer(code);
@@ -280,7 +336,7 @@ namespace SimpleTokenizer
             // push the tokens into the parser
             Parser pr = new Parser(tk.tokens);
 
-            pr.ParseTokens();
+            pr.ParseTokens();*/
             // foreach (var t in pr.tokens)
             // {
             //     Console.WriteLine(t.ToString());
