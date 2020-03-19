@@ -23,10 +23,12 @@ namespace SimpleTokenizer
     class Tokenizer
     {
         public List<Token> tokens;
-
+        public int pos;
+        
         public Tokenizer(string raw_text)
         {
-            this.tokens = GenerateTokenList(raw_text);
+            this.tokens = GenerateTokenUsingSplit(raw_text);
+            this.pos = 0;
         }
         
         // generate the token list
@@ -106,8 +108,7 @@ namespace SimpleTokenizer
 
         private Token Match(string unMatchedToken)
         {
-            string type = "";
-            
+
             // if it matches a digit
             if (Regex.IsMatch(unMatchedToken, @"\d+"))
             {
@@ -131,11 +132,45 @@ namespace SimpleTokenizer
                 Console.WriteLine(unMatchedToken + " EQUAL_SIGN");
                 return new Token("INTEGER", unMatchedToken);
             }
+            
+            if (unMatchedToken.Equals("\n"))
+            {
+                // return the token
+                Console.WriteLine(unMatchedToken + " NEWLINE");
+                return new Token("NEWLINE", unMatchedToken);
+            }
+            
+            // else it is an unknown token and should throw error
             return null;
         }
-        
-        
-        
+
+        public Token GetToken()
+        {
+            // returns the next token, moving up one in position
+            return null;
+        }
+
+        public int Mark()
+        {
+            // returns the position of the array 
+            return this.pos;
+        }
+
+        public void Reset(int p)
+        {
+            // sets the pos in list
+            this.pos = p;
+        }
+
+        public Token Peek()
+        {
+            // returns the next token in list w/o changing the pos
+            if (this.pos == this.tokens.Count)
+            {
+                // stub will continue later.
+            }
+            return null;
+        }
         
     }
     
@@ -319,13 +354,9 @@ namespace SimpleTokenizer
         static void Main(string[] args)
         {
             string example = "a = 9; b = 9;";
-
-            string[] tokens = example.Split(new char[] {' ', ';'});
-
-            foreach (string word in tokens)
-            {
-                Console.WriteLine(word);
-            }
+            
+            // tokenize
+            Tokenizer tk = new Tokenizer(example);
             
             /*// source code that we will test
             string code = "a = 9;";
