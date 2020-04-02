@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
@@ -12,9 +13,10 @@ using System.Runtime.CompilerServices;
  * this handles simple operations such as 3 + 6
  *
  * Grammar ->
- * ASSIGNMENT ::= LHS '=' RHS
- * LHS = IDENTIFIER
- * RHS = IDENTIFIER | NUMBER
+ * <stmt> -> id = <term>
+ * <expr> → <term> {(+ | -) <term>}
+ * <term> → <factor> {(* | /) <factor>}
+ * <factor> → id | int_constant | ( <expr> )
  * 
  */
 
@@ -41,154 +43,84 @@ namespace SimpleTokenizer
             return $"TOKEN: ({Type}, {Value})";
         }
     }
-    class Tokenizer
+    
+    // global variables
+    public static class Globals
     {
-        public List<Token> tokens;
-        public List<Token> processed_tokens;
-        
-        public int pos;
-        
-        public Tokenizer(string raw_text)
+        public static int CharClass;
+        public static char[] Lexeme = new char[100];
+        public static char NextChar;
+        public static int LexLength;
+        public static int NextToken = -2;
+
+        public static void Error(string msg)
         {
-            this.tokens = GenerateTokenUsingSplit(raw_text);
-            this.pos = 0;
+            Console.WriteLine(msg);
+            Environment.Exit(1); // should be an error
         }
-        
-        private List<Token> GenerateTokenUsingSplit(string text)
-        {
-            // take in the string and use the match function to match function to create a token
-            string[] tks = text.Split(new char[] {' ', ';'});
-            
-            // create a temp list to hold the tokens
-            List<Token> t = new List<Token>();
-            
-            // for each token, match it
-            foreach (string word in tks)
-            {
-                t.Add(Match(word));
-            }
-            
-            // add the EOF token
-            t.Add(new Token("EOF", "EOF"));
-
-            return t;
-        }
-
-        private Token Match(string unMatchedToken)
-        {
-
-            // if it matches a digit
-            if (Regex.IsMatch(unMatchedToken, @"\d+"))
-            {
-                // return the token
-                Console.WriteLine(unMatchedToken + " INTEGER");
-                return new Token("INTEGER", unMatchedToken);
-            }
-                
-            // if it matches a word
-            if (Regex.IsMatch(unMatchedToken, @"\w+"))
-            {
-                // return the token
-                Console.WriteLine(unMatchedToken + " IDENTIFIER");
-                return new Token("IDENTIFIER", unMatchedToken);
-            }
-
-            // if it matches an equal sign
-            if (unMatchedToken.Equals("="))
-            {
-                // return the token
-                Console.WriteLine(unMatchedToken + " EQUAL_SIGN");
-                return new Token("INTEGER", unMatchedToken);
-            }
-            
-            if (unMatchedToken.Equals("\n"))
-            {
-                // return the token
-                Console.WriteLine(unMatchedToken + " NEWLINE");
-                return new Token("NEWLINE", unMatchedToken);
-            }
-            
-            // else it is an unknown token and should throw error
-            return null;
-        }
-
-        public Token GetToken()
-        {
-            // returns the next token, moving up one in position
-            return null;
-        }
-
-        public int Mark()
-        {
-            // returns the position of the array 
-            return this.pos;
-        }
-
-        public void Reset(int p)
-        {
-            // sets the pos in list
-            this.pos = p;
-        }
-
-        public Token Peek()
-        {
-            if (this.pos == this.processed_tokens.Count)
-            {
-                
-            }
-            
-            // // returns the next token in list w/o changing the pos
-            // if (this.pos == this.tokens.Count)
-            // {
-            //     // stub will continue later.
-            // }
-            return null;
-        }
-        
     }
 
-    class Parser
-    { 
-        /*
-        * Grammar ->
-        * ASSIGNMENT ::= LHS '=' RHS
-        * LHS = IDENTIFIER
-        * RHS = IDENTIFIER | NUMBER
-        *
-        */
+    public static class Constants
+    {
+        public const int IntLiteral = 10;
+        public const int Identifier = 11;
+        public const int AssignOperator = 20;
+        public const int AddOperator = 21;
+        public const int SubOperator = 22;
+        public const int MultOperator = 23;
+        public const int DivOperator = 24;
+        public const int LeftParen = 25;
+        public const int RightParen = 26;
         
-        private Tokenizer _tk;
-        private Token _nextToken;
-        public Parser(Tokenizer tk)
-        {
-            this._tk = tk;
-            
-            //do while to lex()
-            do
-            {
-                tk.GetToken();
-            } while (_nextToken.Type != "EOF");
-        }
-
-        private void ParseAssignment()
-        {
-            
-        }
-        
-        // 
-        
+        // character classes
+        public const int Letter = 0;
+        public const int Digit = 0;
+        public const int Unknown = 99;
     }
+    
     
     
     // main program class
     class Program
     {
+        public void AddChar()
+        {
+            if (Globals.LexLength <= 98)
+            {
+                Globals.Lexeme[Globals.LexLength++] = Globals.NextChar;
+                Globals.Lexeme[Globals.LexLength] = (char) 0; // have to convert it to a char
+            }
+            else
+            {
+                
+            }
+        }
+
+        public void GetChar()
+        {
+            
+        }
+
+        public void GetNonBlank()
+        {
+            
+        }
+
+        int Lookup(char ch)
+        {
+            return 0;
+        }
+
+        public int Lex()
+        {
+            return 0;
+        }
         static void Main(string[] args)
         {
             string example = "a = 9";
-            
-            // tokenize
-            Tokenizer tk = new Tokenizer(example);
+            Globals.Error("this is an example.");
+
+            Console.WriteLine("you shouldn't see me");
         }
     }
 }
